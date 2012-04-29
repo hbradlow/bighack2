@@ -6,4 +6,5 @@ urlpatterns = patterns("data.views",
 		url("^ajax/amazon/$", "collect",name="amazon_collect"),
 		url("^ajax/appliance/$", "ajax_appliance",name="ajax_appliance"),
 		url("^ajax/curve/$", "ajax_appliance_curve",name="ajax_appliance_curve"),
+		url("^testavg/$", "averageConsumption"),
 )
