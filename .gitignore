@@ -1,8 +1,10 @@
 *.py[co]
+venv
 
 # Packages
 *.egg
 *.egg-info
+migrations
 dist
 build
 eggs
