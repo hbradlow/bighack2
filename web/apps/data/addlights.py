@@ -22,7 +22,7 @@ for row in f:
     except:
         model = None
     try: 
-        int(annual_energy_consumption=row[8])
+        annual_energy_consumption = float(row[7])
     except:
         annual_energy_consumption=-1
     app = Appliance(manufacturer=manufacturer,brand=brand,model=model,annual_energy_consumption=annual_energy_consumption)
