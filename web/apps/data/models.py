@@ -48,7 +48,11 @@ class Fridge(models.Model):
     height = models.FloatField()
     depth = models.FloatField()
     model = models.CharField(max_length=50)
+
+class FlourescentLamp(models.Model):
+    appliance = models.ForeignKey(Appliance)
     
+admin.site.register(FlourescentLamp) 
 admin.site.register(Appliance)
 admin.site.register(Heater)
 admin.site.register(Fridge)
