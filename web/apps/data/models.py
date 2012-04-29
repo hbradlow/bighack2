@@ -5,7 +5,7 @@ class Appliance(models.Model):
     manufacturer = models.CharField(max_length=50)
     brand = models.CharField(max_length=50)
     model = models.CharField(max_length=50)
-    annual_energy_consumption = models.IntegerField()
+    annual_energy_consumption = models.FloatField()
 
 class Heater(models.Model):
     boiler_type = models.CharField(max_length=50)
@@ -24,12 +24,13 @@ class Fridge(models.Model):
     defrost = models.CharField(max_length=50)
     fridge_type = models.CharField(max_length=50)
     access = models.CharField(max_length=50)
-    fresh_volume = models.IntegerField()
-    freezer_volume = models.IntegerField()
-    total_volume = models.IntegerField()
-    width = models.IntegerField()
-    height = models.IntegerField()
-    depth = models.IntegerField()
+    fresh_volume = models.FloatField()
+    freezer_volume = models.FloatField()
+    total_volume = models.FloatField()
+    width = models.FloatField()
+    height = models.FloatField()
+    depth = models.FloatField()
+    model = models.CharField(max_length=50)
     
 admin.site.register(Appliance)
 admin.site.register(Heater)
