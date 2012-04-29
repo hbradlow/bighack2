@@ -27,7 +27,6 @@
 		</div>
 		<div class="span6">
 			<div style="width:auto" id="personal">
-				THIS
 			</div>
 		</div>
 	</div>
@@ -58,7 +57,10 @@
 							appliances.push(v);
 							user_data.push(5000);
 							average_data.push(5000);
-							chart.redraw();
+
+							chart.xAxis[0].setCategories(appliances,true);
+							chart.series[0].setData(user_data,true);
+							chart.series[1].setData(average_data,true);
 
 							$(this).val("");
 						}

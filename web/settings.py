@@ -164,6 +164,7 @@ INSTALLED_APPS = [
     
     # project
     "about",
+    'data',
 ]
 
 FIXTURE_DIRS = [

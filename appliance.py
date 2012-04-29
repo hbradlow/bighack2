@@ -48,5 +48,7 @@ class Appliance:
         for param in filters:
             filterDict[param] = currentModel[param]
         filteredApps = self.filterBy(filterDict)
-        filteredList = [(app['energy_consumption'], app) for app in filteredApps]
+        filteredList = []
+        for app in filteredApps:
+            filteredList.append((int(filteredApps[app]['energy_consumption']), filteredList[app))
         return filteredList.sorted()[:k]
