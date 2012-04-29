@@ -6,6 +6,8 @@ class Appliance(models.Model):
     brand = models.CharField(max_length=50)
     model = models.CharField(max_length=50)
     annual_energy_consumption = models.FloatField()
+    def __unicode__(self):
+        return self.brand + " " + self.model + " " + str(self.annual_energy_consumption)
 
 class Heater(models.Model):
     boiler_type = models.CharField(max_length=50)
