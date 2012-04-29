@@ -9,28 +9,28 @@
 
 {% block body %}
 	<h2>Dashboard</h2>
-	<div class="row">
-		<div class="span6">
-			<div id="container" style="width: 100%; height: 400px"></div>
 			<div class="row">
-				<div class="span4">
+				<div class="span9">
 					<h3>List of appliances</h3>
 					<div id="appliance_list">
 					</div>
 				</div>
-				<div class="span4">
+				<div class="span3">
 					<input type="text" data-provide="typeahead" id="appliance_input">
 					<script type="text/javascript">
 						$(function(){
 								$("#appliance_input").typeahead({
 									source: function(typeahead,query){
-									$.post("{% url ajax_appliance %}",{"query":query},function(data){ console.log(data); typeahead.process(data);},"JSON");
-									}
+									$.post("{% url ajax_appliance %}",{"query":query},function(data){ typeahead.process(data);},"JSON");
+									},
 								})
 						});
 					</script>
 				</div>
 			</div>
+	<div class="row">
+		<div class="span6">
+			<div id="container" style="width: 100%; height: 400px"></div>
 		</div>
 		<div class="span6">
 			<div style="width:auto" id="personal">
@@ -55,55 +55,59 @@
 								  {{datum}},
 								{% endfor %}
 							];
-		var normalized_user_data = [];
-		var normalized_average_data = [];
-		var total_user = 0;
-		var total_average = 0;
+		var kitchen_data  = [];
+		var living_data  = [];
+		var kitchen_appliances  = [];
+		var living_appliances  = [];
+		var normalized_user_kitchen_data = [];
+		var normalized_user_living_data = [];
+		var total_kitchen = 0;
+		var total_living = 0;
 		var total = 0;
 		var data;
 		var browserData;
 		var versionsData;
 		var colors = Highcharts.getOptions().colors,
-			categories = ['Bathroom', 'Kitchen'],
+			categories = ['Kitchen', 'Living Room'],
 			name = 'Browser brands';
 		function calculate_pie(){
-			normalized_user_data = [];
-			normalized_average_data = [];
+			normalized_user_kitchen_data = [];
+			normalized_user_living_data= [];
 			tota = 0;
-			total_user = 0;
-			total_average = 0;
-			for(var i = 0; i<user_data.length; i++)
-				total += user_data[i];
-			for(var i = 0; i<average_data.length; i++)
-				total += average_data[i];
-			for(var i = 0; i<user_data.length; i++)
+			total_living = 0;
+			total_kitchen = 0;
+			for(var i = 0; i<kitchen_data.length; i++)
+				total += kitchen_data[i];
+			for(var i = 0; i<living_data.length; i++)
+				total += living_data[i];
+			for(var i = 0; i<kitchen_data.length; i++)
 			{
-				var d = Math.ceil(user_data[i]*100/total);
-				normalized_user_data.push(d);
-				total_user += d;
+				var d = Math.ceil(kitchen_data[i]*100/total);
+				normalized_user_kitchen_data.push(d);
+				total_kitchen += d;
 			}
-			for(var i = 0; i<average_data.length; i++)
+			for(var i = 0; i<living_data.length; i++)
 			{
-				var d = Math.ceil(average_data[i]*100/total);
-				normalized_average_data.push(d);
-				total_average += d; 
+				var d = Math.ceil(living_data[i]*100/total);
+				normalized_user_living_data.push(d);
+				total_living += d; 
 			}
 			data = [{
-						y: total_user,
+						y: total_kitchen,
 						color: colors[0],
 						drilldown: {
-							name: 'Bathroom details',
-							categories: appliances, 
-							data: normalized_user_data, 
+							name: 'Kitchen details',
+							categories: kitchen_appliances, 
+							data: normalized_user_kitchen_data, 
 							color: colors[0]
 						}
 					}, {
-						y: total_average,
+						y: total_living,
 						color: colors[1],
 						drilldown: {
-							name: 'Kitchen details',
-							categories: appliances, 
-							data: normalized_average_data, 
+							name: 'Living Room details',
+							categories: living_appliances, 
+							data: normalized_user_living_data, 
 							color: colors[1]
 						}
 					}];
@@ -137,12 +141,30 @@
 				$("#appliance_input").keyup(function(event){
 						if(event.keyCode=="13"){
 							var v = $(this).val();
+							var num = v.split(" ");
+							var type = num[0].split(":")[0];
+							num = Math.ceil(num[num.length-1]);
+							if (num==100000)
+							{
+								num = Math.ceil(num/1000.0);
+							}
 							var d = "<div>" + v + "</div>";
 							$("#appliance_list").append(d);
 
+
 							appliances.push(v);
-							user_data.push(5000);
-							average_data.push(5000);
+							if(type=="Fridge")
+								kitchen_appliances.push(v);
+							if(type=="Heater")
+								living_appliances.push(v);
+							console.log(type);
+							user_data.push(num);
+							if(type=="Fridge")
+								kitchen_data.push(num);
+							if(type=="Heater")
+								living_data.push(num);
+							average_data.push(num+100);
+
 							calculate_pie();
 
 							chart.xAxis[0].setCategories(appliances,true);
