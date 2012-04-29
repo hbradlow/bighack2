@@ -45,6 +45,7 @@
 
 	<script type="text/javascript">
 		var chart;
+		var chart3;
 		var appliances =	[
 								{% for appliance in appliances %}
 									"{{appliance}}",
@@ -148,7 +149,13 @@
 							var v = $(this).val();
 							var num = v.split(" ");
 							var type = num[0].split(":")[0];
-							num = Math.ceil(num[num.length-1]);
+							var pk = num[num.length-1];
+							$.post("{% url ajax_appliance_curve %}",{"pk":pk},
+								function(d){
+								chart3.addSeries({name:"Test",data:d},true);
+								}
+							);
+							num = Math.ceil(num[num.length-2]);
 							if (num==100000)
 							{
 								num = Math.ceil(num/1000.0);
@@ -264,7 +271,6 @@
 		});
 	});
 	$(function(){
-			var chart3;
 			chart3 = new Highcharts.Chart({
 				chart: {
 					renderTo: 'line_chart',
