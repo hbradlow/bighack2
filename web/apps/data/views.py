@@ -5,32 +5,29 @@ from django.core.urlresolvers import reverse
 from BeautifulSoup import BeautifulSoup
 import mechanize 
 import urllib
-<<<<<<< HEAD
-=======
 from data.models import *
 from data.ecost import *
->>>>>>> 0091916457402bf541f1e8c1cef6ab8c53f6ed58
 
 def tmp(request):
 	appliances = [] 
-	appliances.append("Fridge")
-	appliances.append("Heater")
-	appliances.append("Dish Washer")
-	appliances.append("Toaster")
 
-<<<<<<< HEAD
-	user_data = [5000,4000,6000,1000]
-	average_data = [4500,4500,7000,1000]
-	return render_to_response("main.html",{"appliances":appliances,"user_data":user_data,"average_data":average_data},context_instance=RequestContext(request))
-=======
 	user_data = []
 	average_data = []
 
 	import random
 	line_data_x = []
 	line_data_y = []
-	return render_to_response("main.html",{"fridge_ave":1000,"heater_ave":2000,"appliances":appliances,"user_data":user_data,"average_data":average_data,"line_data_x":line_data_x,"line_data_y":line_data_y},context_instance=RequestContext(request))
->>>>>>> 0091916457402bf541f1e8c1cef6ab8c53f6ed58
+	return render_to_response("main.html",{"fridge_ave":averageConsumption_method("Fridge"),"heater_ave":averageConsumption_method("Heater"),"appliances":appliances,"user_data":user_data,"average_data":average_data,"line_data_x":line_data_x,"line_data_y":line_data_y},context_instance=RequestContext(request))
+
+def collect_fn(unit_type, unit_nr):
+
+    br = mechanize.Browser()
+    br.open("http://amazon.com") 
+    br.select_form(name="site-search") 
+    br['field-keywords'] = unit_type + " " + unit_nr
+    response = br.submit()
+    soup = BeautifulSoup(response.read())
+    return str(soup.find("div", {"id" : "result_0"})) 
 
 def collect(request):
     unit_type = request.GET["unit_type"]
@@ -43,8 +40,6 @@ def collect(request):
     response = br.submit()
     soup = BeautifulSoup(response.read())
     return HttpResponse(str(soup.find("div", {"id" : "result_0"})))
-<<<<<<< HEAD
-=======
 
 def ajax_appliance(request):
 	import json
@@ -78,15 +73,21 @@ def averageConsumption_method(unit_type):
         return totalUsage/count
     else:
         return "No such appliance"
-
 def averageConsumption(request):
     unit_type = request.GET['unit_type']
     if unit_type == 'Heater':
-        return HttpResponse(str('768.9873'))
+        items = Heater.objects.all()
+        totalUsage = 0.0
+        for unit in items:
+            totalUsage += unit.appliance.annual_energy_consumption
+        return HttpResponse(str(totalUsage/len(items)))
 
     elif unit_type == 'Fridge':
-        return HttpResponse(str('496.12345325'))
+        items = Fridge.objects.all()
+        totalUsage = 0.0
+        count = 0
+        for unit in items:
+            totalUsage += unit__appliance__annual_energy_consumption
+        return HttpResponse(str(totalUsage/count))
     else:
         return HttpResponse("No such appliance")
->>>>>>> 0091916457402bf541f1e8c1cef6ab8c53f6ed58
-
