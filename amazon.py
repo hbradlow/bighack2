@@ -9,4 +9,4 @@ def collect(unit_type, unit_nr):
     br['field-keywords'] = unit_type + " " + unit_nr
     response = br.submit()
     soup = BeautifulSoup(response.read())
-    return soup.find("div", {"id" : "result_0"})
+    return str(soup.find("div", {"id" : "result_0"}))
