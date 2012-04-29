@@ -12,7 +12,11 @@ def tmp(request):
 
 	user_data = []
 	average_data = []
-	return render_to_response("main.html",{"appliances":appliances,"user_data":user_data,"average_data":average_data},context_instance=RequestContext(request))
+
+	import random
+	line_data_x = [random.choice(range(50)) for i in range(100)]
+	line_data_y = [random.choice(range(50)) for i in range(100)]
+	return render_to_response("main.html",{"appliances":appliances,"user_data":user_data,"average_data":average_data,"line_data_x":line_data_x,"line_data_y":line_data_y},context_instance=RequestContext(request))
 
 def collect(request):
     unit_type = request.GET["unit_type"]

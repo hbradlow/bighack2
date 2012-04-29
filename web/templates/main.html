@@ -37,6 +37,11 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="span12">
+			<div id="line_chart" style="width: 100%; height: 400px"></div>
+		</div>
+	</div>
 
 	<script type="text/javascript">
 		var chart;
@@ -73,7 +78,7 @@
 		function calculate_pie(){
 			normalized_user_kitchen_data = [];
 			normalized_user_living_data= [];
-			tota = 0;
+			total = 0;
 			total_living = 0;
 			total_kitchen = 0;
 			for(var i = 0; i<kitchen_data.length; i++)
@@ -257,6 +262,33 @@
 				}]
 			});
 		});
+	});
+	$(function(){
+			var chart3;
+			chart3 = new Highcharts.Chart({
+				chart: {
+					renderTo: 'line_chart',
+					type: 'line',
+				},
+				title: {
+					text: 'Energy Usage Summary'
+				},
+				xAxis: {
+					categories: appliances
+				},
+				yAxis: {
+					title: {
+						text: 'Energy Used'
+					}
+				},
+				series: [{
+					name: 'Your Current Usage',
+					data: {{line_data_x}} 
+				}, {
+					name: 'What your usage could be...',
+						  data: {{line_data_y}} 
+				}]
+			});
 	});
 	</script>
 
