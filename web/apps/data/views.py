@@ -5,16 +5,13 @@ from django.core.urlresolvers import reverse
 from BeautifulSoup import BeautifulSoup
 import mechanize 
 import urllib
+from data.models import *
 
 def tmp(request):
 	appliances = [] 
-	appliances.append("Fridge")
-	appliances.append("Heater")
-	appliances.append("Dish Washer")
-	appliances.append("Toaster")
 
-	user_data = [5000,4000,6000,1000]
-	average_data = [4500,4500,7000,1000]
+	user_data = []
+	average_data = []
 	return render_to_response("main.html",{"appliances":appliances,"user_data":user_data,"average_data":average_data},context_instance=RequestContext(request))
 
 def collect(request):
@@ -28,3 +25,7 @@ def collect(request):
     response = br.submit()
     soup = BeautifulSoup(response.read())
     return HttpResponse(str(soup.find("div", {"id" : "result_0"})))
+def ajax_appliance(request):
+	import json
+	appliances = Appliance.objects.filter(brand__icontains=request.POST["query"])[:10]
+	return HttpResponse(json.dumps([str(a) for a in appliances]))

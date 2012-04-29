@@ -2,10 +2,27 @@ from django.db import models
 from django.contrib import admin
 
 class Appliance(models.Model):
-    manufacturer = models.CharField(max_length=50)
-    brand = models.CharField(max_length=50)
-    model = models.CharField(max_length=50)
-    annual_energy_consumption = models.FloatField()
+	manufacturer = models.CharField(max_length=50)
+	brand = models.CharField(max_length=50)
+	model = models.CharField(max_length=50)
+	annual_energy_consumption = models.FloatField()
+	def type(self):
+		try:
+			h = self.heater_set.all()
+			if len(h)>0:
+				return "Heater"
+		except:
+			pass
+		try:
+			f = self.fridge_set.all()
+			if len(f)>0:
+				return "Fridge"
+		except:
+			pass
+		return "None"
+		
+	def __unicode__(self):
+		return self.type() + ": " + self.brand + " " + self.model + " " + str(self.annual_energy_consumption)
 
 class Heater(models.Model):
     boiler_type = models.CharField(max_length=50)
