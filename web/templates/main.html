@@ -1,4 +1,4 @@
-{% extends "banner_base.html" %}
+{% extends "site_base.html" %}
 
 {% load i18n %}
 {% load ifsetting_tag %}
@@ -7,8 +7,7 @@
 
 {% block body_class %}home{% endblock %}
 
-{% block banner %}
-    <h1>{% trans "Enery Hack" %}</h1>
+{% block body %}
 	<div id="container" style="width: 100%; height: 400px"></div>
 	<script type="text/javascript">
 		var chart;
@@ -19,22 +18,34 @@
 						type: 'bar',
 					},
 					title: {
-						text: 'testing...'
+						text: 'Energy Usage Summary'
 					},
 					xAxis: {
-						categories: ['Apples', 'Bananas', 'Oranges']
+						categories: [
+							{% for appliance in appliances %}
+								"{{appliance}}",
+							{% endfor %}
+						]
 					},
 					yAxis: {
 						title: {
-							text: 'Fruit eaten'
+							text: 'Energy Used'
 						}
 					},
 					series: [{
-						name: 'Jane',
-						data: [1, 0, 4]
+						name: 'Your Current Usage',
+						  data: [
+							{% for datum in user_data %}
+							  {{datum}},
+							{% endfor %}
+						  ]
 					}, {
-						name: 'John',
-						data: [5, 7, 3]
+						name: 'Average American Usage',
+						  data: [
+							{% for datum in average_data %}
+							  {{datum}},
+							{% endfor %}
+						  ]
 					}]
 				});
 		});
