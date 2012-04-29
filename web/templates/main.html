@@ -152,8 +152,9 @@
 							var pk = num[num.length-1];
 							$.post("{% url ajax_appliance_curve %}",{"pk":pk},
 								function(d){
-								chart3.addSeries({name:"Test",data:d},true);
-								}
+									console.log(d);
+									chart3.addSeries({name:d["name"]},true).setData(d["data"],true);
+								},"JSON"
 							);
 							num = Math.ceil(num[num.length-2]);
 							if (num==100000)
@@ -287,13 +288,8 @@
 						text: 'Energy Used'
 					}
 				},
-				series: [{
-					name: 'Your Current Usage',
-					data: {{line_data_x}} 
-				}, {
-					name: 'What your usage could be...',
-						  data: {{line_data_y}} 
-				}]
+				series: [
+				]
 			});
 	});
 	</script>

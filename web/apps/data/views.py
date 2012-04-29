@@ -6,6 +6,7 @@ from BeautifulSoup import BeautifulSoup
 import mechanize 
 import urllib
 from data.models import *
+from data.ecost import *
 
 def tmp(request):
 	appliances = [] 
@@ -14,9 +15,8 @@ def tmp(request):
 	average_data = []
 
 	import random
-	from data.ecost import *
-	line_data_x = sum_cost(Appliance.objects.all()[0]) 
-	line_data_y = sum_cost(Appliance.objects.all()[1]) 
+	line_data_x = sum_cost(Appliance.objects.all()[0])[0] 
+	line_data_y = sum_cost(Appliance.objects.all()[1])[0] 
 	return render_to_response("main.html",{"appliances":appliances,"user_data":user_data,"average_data":average_data,"line_data_x":line_data_x,"line_data_y":line_data_y},context_instance=RequestContext(request))
 
 def collect(request):
@@ -32,12 +32,12 @@ def collect(request):
     return HttpResponse(str(soup.find("div", {"id" : "result_0"})))
 def ajax_appliance(request):
 	import json
-	print "HERE"
 	appliances = Appliance.objects.filter(brand__icontains=request.POST["query"])[:10]
 	return HttpResponse(json.dumps([str(a) for a in appliances]))
+
 def ajax_appliance_curve(request):
-	a = Appliance.objects.get(pk=request.GET['pk'])
-	from data.ecost import *
-	line_data_x = sum_cost(a)
-	return json.dumps(line_data_x)
+	import json
+	a = Appliance.objects.get(pk=request.POST['pk'])
+	line_data_x = sum_cost(a)[0]
+	return HttpResponse(json.dumps({"data":line_data_x,"name":str(a)}))
 
