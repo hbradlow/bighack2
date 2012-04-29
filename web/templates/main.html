@@ -8,7 +8,7 @@
 {% block body_class %}home{% endblock %}
 
 {% block body %}
-	<h2>Dashboard</h2>
+<h2>Dashboard</h2>
 			<div class="row">
 				<div class="span9">
 					<h3>List of appliances</h3>
@@ -37,9 +37,15 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="span12">
+			<div id="line_chart" style="width: 100%; height: 400px"></div>
+		</div>
+	</div>
 
 	<script type="text/javascript">
 		var chart;
+		var chart3;
 		var appliances =	[
 								{% for appliance in appliances %}
 									"{{appliance}}",
@@ -73,7 +79,7 @@
 		function calculate_pie(){
 			normalized_user_kitchen_data = [];
 			normalized_user_living_data= [];
-			tota = 0;
+			total = 0;
 			total_living = 0;
 			total_kitchen = 0;
 			for(var i = 0; i<kitchen_data.length; i++)
@@ -143,7 +149,14 @@
 							var v = $(this).val();
 							var num = v.split(" ");
 							var type = num[0].split(":")[0];
-							num = Math.ceil(num[num.length-1]);
+							var pk = num[num.length-1];
+							$.post("{% url ajax_appliance_curve %}",{"pk":pk},
+								function(d){
+									console.log(d);
+									chart3.addSeries({name:d["name"]},true).setData(d["data"],true);
+								},"JSON"
+							);
+							num = Math.ceil(num[num.length-2]);
 							if (num==100000)
 							{
 								num = Math.ceil(num/1000.0);
@@ -160,10 +173,15 @@
 							console.log(type);
 							user_data.push(num);
 							if(type=="Fridge")
+							{
 								kitchen_data.push(num);
+								average_data.push({{fridge_ave}});
+							}
 							if(type=="Heater")
+							{
 								living_data.push(num);
-							average_data.push(num+100);
+								average_data.push({{heater_ave}});
+							}
 
 							calculate_pie();
 
@@ -257,6 +275,27 @@
 				}]
 			});
 		});
+	});
+	$(function(){
+			chart3 = new Highcharts.Chart({
+				chart: {
+					renderTo: 'line_chart',
+					type: 'line',
+				},
+				title: {
+					text: 'Energy Usage Summary'
+				},
+				xAxis: {
+					categories: appliances
+				},
+				yAxis: {
+					title: {
+						text: 'Energy Used'
+					}
+				},
+				series: [
+				]
+			});
 	});
 	</script>
 

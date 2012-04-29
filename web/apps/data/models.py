@@ -22,7 +22,7 @@ class Appliance(models.Model):
 		return "None"
 		
 	def __unicode__(self):
-		return self.type() + ": " + self.brand + " " + self.model + " " + str(self.annual_energy_consumption)
+		return self.type() + ": " + self.brand + " " + self.model + " " + str(self.annual_energy_consumption) + " " + str(self.pk)
 
 class Heater(models.Model):
     boiler_type = models.CharField(max_length=50)
