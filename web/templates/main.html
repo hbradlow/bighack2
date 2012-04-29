@@ -9,9 +9,50 @@
 
 {% block body %}
 	<div id="container" style="width: 100%; height: 400px"></div>
+	<div class="row">
+		<div class="span4">
+			<div id="appliance_list">
+				<div>
+					Fridge 1
+				</div>
+			</div>
+		</div>
+		<div class="span4">
+			<input type="text" data-provide="typeahead" id="appliance_input">
+		</div>
+	</div>
 	<script type="text/javascript">
 		var chart;
+		var appliances =	[
+								{% for appliance in appliances %}
+									"{{appliance}}",
+								{% endfor %}
+							]
+		var user_data =		[
+								{% for datum in user_data %}
+								  {{datum}},
+								{% endfor %}
+							]
+		var average_data =	[
+								{% for datum in average_data %}
+								  {{datum}},
+								{% endfor %}
+							]
 		$(function(){
+				$("#appliance_input").keyup(function(event){
+						if(event.keyCode=="13"){
+							var v = $(this).val();
+							var d = "<div>" + v + "</div>";
+							$("#appliance_list").append(d);
+
+							appliances.push(v);
+							user_data.push(5000);
+							average_data.push(5000);
+							chart.redraw();
+
+							$(this).val("");
+						}
+					});
 				chart = new Highcharts.Chart({
 					chart: {
 						renderTo: 'container',
@@ -21,11 +62,7 @@
 						text: 'Energy Usage Summary'
 					},
 					xAxis: {
-						categories: [
-							{% for appliance in appliances %}
-								"{{appliance}}",
-							{% endfor %}
-						]
+						categories: appliances
 					},
 					yAxis: {
 						title: {
@@ -34,18 +71,10 @@
 					},
 					series: [{
 						name: 'Your Current Usage',
-						  data: [
-							{% for datum in user_data %}
-							  {{datum}},
-							{% endfor %}
-						  ]
+						  data: user_data 
 					}, {
 						name: 'Average American Usage',
-						  data: [
-							{% for datum in average_data %}
-							  {{datum}},
-							{% endfor %}
-						  ]
+						  data: average_data 
 					}]
 				});
 		});
