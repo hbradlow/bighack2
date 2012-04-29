@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from BeautifulSoup import BeautifulSoup
 import mechanize 
 import urllib
+from data.models import *
 
 def tmp(request):
 	appliances = [] 
@@ -28,3 +29,7 @@ def collect(request):
     response = br.submit()
     soup = BeautifulSoup(response.read())
     return HttpResponse(str(soup.find("div", {"id" : "result_0"})))
+def ajax_appliance(request):
+	import json
+	appliances = Appliance.objects.filter(brand__icontains=request.POST["query"])
+	return HttpResponse(json.dumps([str(a) for a in appliances]))
