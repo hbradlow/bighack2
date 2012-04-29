@@ -21,22 +21,19 @@ class Appliance:
         """
         result = {}
         for appliance in self.database:
-            flag = False
-            for param,value in parameters.items():
-                if self.database[appliance][param] != value:
-                    flag = True
-                    break
-            if not flag:
-                result[appliance] = self.database[appliance]
+            if appliance != 'parameterValues':
+                flag = False
+                for param,value in parameters.items():
+                    if self.database[appliance][param] != value:
+                        flag = True
+                        break
+                if not flag:
+                    result[appliance] = self.database[appliance]
         return result
 
     def getParameters(self):
         """
-        Return a list of the available filter parameters for this device
+        Return a dictionary of the form {'parameter' : [val1, val2, ...]}
         """
-        from random import choice
-        k = choice(self.database.keys())
-        return [x for x in self.database[k]]
+        return self.database['parameterValues']
 
-    def get
-    
