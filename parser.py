@@ -17,6 +17,11 @@ for applianceName in applianceReference:
     for p in parameterValues:
         parameterValues[p] = list(parameterValues[p])
     applianceDict['parameterValues'] = parameterValues
+    ls = parameterValues.keys()
+    for i in xrange(len(ls)):
+        print str(i) + ": " + str(ls[i])
+    userIn = raw_input("which parameter best approximates the annual energy consumption of the appliance? ")
+    applianceDict['energy_consumption'] = ls[int(userIn)]
     f = open(applianceName+".json", 'w')
     f.write(json.dumps(applianceDict))
     f.close()
