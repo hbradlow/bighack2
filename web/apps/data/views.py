@@ -28,3 +28,7 @@ def collect(request):
     response = br.submit()
     soup = BeautifulSoup(response.read())
     return HttpResponse(str(soup.find("div", {"id" : "result_0"})))
+def ajax_appliance(request):
+	import json
+	appliances = Appliance.objects.all()
+	return HttpResponse(json.dumps([a.brand for a in appliances]))
