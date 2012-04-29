@@ -17,7 +17,7 @@ def tmp(request):
 	import random
 	line_data_x = []
 	line_data_y = []
-	return render_to_response("main.html",{"fridge_ave":averageConsumption_method("Fridge"),"heater_ave":averageConsumption_method("Heater"),"appliances":appliances,"user_data":user_data,"average_data":average_data,"line_data_x":line_data_x,"line_data_y":line_data_y},context_instance=RequestContext(request))
+	return render_to_response("main.html",{"fridge_ave":1000,"heater_ave":2000,"appliances":appliances,"user_data":user_data,"average_data":average_data,"line_data_x":line_data_x,"line_data_y":line_data_y},context_instance=RequestContext(request))
 
 def collect_fn(unit_type, unit_nr):
 
@@ -73,6 +73,7 @@ def averageConsumption_method(unit_type):
         return totalUsage/count
     else:
         return "No such appliance"
+
 def averageConsumption(request):
     unit_type = request.GET['unit_type']
     if unit_type == 'Heater':

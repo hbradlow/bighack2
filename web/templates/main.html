@@ -8,7 +8,7 @@
 {% block body_class %}home{% endblock %}
 
 {% block body %}
-<h2>Dashboard{{fridge_ave}}</h2>
+<h2>Dashboard</h2>
 			<div class="row">
 				<div class="span9">
 					<h3>List of appliances</h3>
@@ -173,10 +173,15 @@
 							console.log(type);
 							user_data.push(num);
 							if(type=="Fridge")
+							{
 								kitchen_data.push(num);
+								average_data.push({{fridge_ave}});
+							}
 							if(type=="Heater")
+							{
 								living_data.push(num);
-							average_data.push(num+100);
+								average_data.push({{heater_ave}});
+							}
 
 							calculate_pie();
 
