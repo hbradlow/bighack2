@@ -24,7 +24,7 @@ for row in data:
     try: 
         int(annual_energy_consumption=row[27])
     except:
-        annual_energy_consumption=100000
+        annual_energy_consumption=-1
     app = Appliance(manufacturer=manufacturer,brand=brand,model=model,annual_energy_consumption=annual_energy_consumption)
     app.save()
     try:
